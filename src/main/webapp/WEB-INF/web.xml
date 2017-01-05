@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" 
+		 version="3.0" 
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+		 					 http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>gradle-hibernate</display-name>
+	<context-param>
+		<description>指定系统环境（开发、测试、生产）</description>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>local</param-value>
+	</context-param>
+	
+	<listener>
+		<description>
+			1、spring容器启动监听，负责监听web容器的启动、关闭事件。
+			2、加载ApplicationContext配置文件。默认加载WEB-INF/applcationContext.xml
+			也可以通过contextConfigLocation来配置自定义文件名、加载路径的配置
+		</description>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<description>初始化项目核心文件</description>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring/*.xml
+		</param-value>
+	</context-param>
+	
+	<listener>
+		<description>
+			防止内存泄露
+			清除该应用相关的在javaBeans Introspector（内省）缓冲中的Introspector
+		</description>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<filter>
+		<description>字符集过滤器  </description>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<description>设置过滤的字符集编码</description>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<description>
+				设置过滤范围
+					true 强制request、response设置字符集  
+					false 强制request设置字符集
+			</description>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- session 有效时间，单位为分钟 -->
+	<session-config>
+		<session-timeout>120</session-timeout>
+	</session-config>
+	
+	<servlet>
+		<description>
+			集中访问器、分发请求
+			load-on-start：容器启动及加载
+			contextConfigLocation：初始化自定义文件名、路径的配置文件（初始化上下文）
+			注：与ContextLoaderListener的contextConfigLocation的区别
+			前者初始化上下文加载的bean是对spring mvc有效的bean，如controller、HandlerMapping、HandlerAdapter
+			后者一般用于除web层的bean加载，以便与任意其它web框架集成。
+		</description>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 出错页面定义 -->
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/common/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/common/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/common/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/common/403.jsp</location>
+	</error-page>
+	
+	<welcome-file-list>
+		<welcome-file>/index</welcome-file>
+	</welcome-file-list>
+	
+	<!-- 关闭不安全的HTTP方法     
+		添加资源素auth-constraint，设置内容为空，禁止所有身份的用户访问相应的资源-->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>http method security</web-resource-name>
+			<url-pattern>/*</url-pattern>
+			<http-method>PUT</http-method>
+			<http-method>DELETE</http-method>
+			<http-method>HEAD</http-method>
+			<http-method>OPTIONS</http-method>
+			<http-method>TRACE</http-method>
+		</web-resource-collection>
+		<auth-constraint />
+	</security-constraint>
+</web-app>

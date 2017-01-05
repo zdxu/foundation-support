@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			 			   http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+			 			   http://www.springframework.org/schema/context 
+    		 			   http://www.springframework.org/schema/context/spring-context-3.1.xsd"
+	default-lazy-init="true">
+	<description>配置文件读取相关配置</description>
+
+	<!-- 定义受环境影响易变的配置 -->
+	<beans profile="local">
+		<!-- 定义受环境影响易变的变量 -->
+		<context:property-placeholder location="classpath:config/config.properties"/>
+		<!-- 指定配置文件 -->
+		<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	        <property name="locations">
+	            <list>
+	                <value>classpath:config/config.properties</value>
+	            </list>
+	        </property>
+	    </bean>
+	    <!-- 自定义日志文件路径加载 -->
+	    <bean id="configLog4j" class="com.zdxu.bd.support.logger.ConfigLog4jPath" lazy-init="false">
+	    	<constructor-arg>
+	    		<value>classpath:config/log4j.xml</value>
+	    	</constructor-arg>
+	    </bean>
+    </beans>
+	<beans profile="deploy">
+		<!-- 定义受环境影响易变的变量 -->
+		<context:property-placeholder location="file:/iflytek/sgy/social/config/gjxx/config.properties"/>
+		<!-- 指定配置文件 -->
+		<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+	        <property name="locations">
+	            <list>
+	                <value>file:/zdxu/config/bd/config.properties</value>
+	            </list>
+	        </property>
+	    </bean>
+	    <!-- 自定义日志文件路径加载 -->
+	    <bean id="configLog4j" class="com.zdxu.bd.support.logger.ConfigLog4jPath" lazy-init="false">
+	    	<constructor-arg>
+	    		<value>file:/zdxu/config/bd/log4j.xml</value>
+	    	</constructor-arg>
+	    </bean>
+    </beans>
+</beans>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!--error日志输出配置 -->
+	<appender name="error" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="ERROR" />
+		<param name="File" value="/iflytek/logs/gradle-hibernate/error/error.log" />
+		<param name="MaxFileSize" value="5MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d %-5p] %l - %m%n" />
+		</layout>
+	</appender>
+
+	<!--通用日志文件输出配置 -->
+	<appender name="dailyRollingFileAppender" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="bufferedIO" value="true" />
+		<param name="Threshold" value="INFO" />
+		<param name="File" value="/iflytek/logs/gradle-hibernate/normal/normal.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd-HH'.log'" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d %-5p] %l - %m%n" />
+		</layout>
+	</appender>
+
+	<!--窗口展示日志 -->
+	<appender name="console.out" class="org.apache.log4j.ConsoleAppender">
+		<param name="target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d %-5p] %l - %m%n" />
+		</layout>
+		<!--过滤器设置输出的级别 -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="debug" />
+			<param name="levelMax" value="info" />
+			<param name="AcceptOnMatch" value="false" />
+		</filter>
+	</appender>
+	<appender name="console.err" class="org.apache.log4j.ConsoleAppender">
+		<param name="target" value="System.err" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d %-5p] %l - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="levelMin" value="warn" />
+			<param name="levelMax" value="fatal" />
+			<param name="AcceptOnMatch" value="false" />
+		</filter>
+	</appender>
+
+	<!--对指定的包设定日志级别，主要目的是减少不必要的日志 -->
+	<logger name="org" additivity="true">
+		<level value="WARN" />
+	</logger>
+	<logger name="net" additivity="true">
+		<level value="WARN" />
+	</logger>
+	<logger name="com.iflytek.iframework" additivity="true">
+		<level value="ERROR" />
+	</logger>
+	<logger name="com.iflytek.uaac" additivity="true">
+		<level value="ERROR" />
+	</logger>
+	<logger name="jdbc" additivity="true">
+		<level value="ERROR" />
+	</logger>
+	<logger name="log4jdbc" additivity="true">
+		<level value="ERROR" />
+	</logger>
+	<logger name="jdbc.sqltiming" additivity="true">
+		<level value="DEBUG" />
+	</logger>
+	<root>
+		<!-- TRACE < DEBUG < INFO < WARN < ERROR < FATAL -->
+		<priority value="error" /><!--日志输出最低级别 -->
+		<appender-ref ref="console.out" />
+		<appender-ref ref="console.err" />
+		<appender-ref ref="error" />
+		<appender-ref ref="dailyRollingFileAppender" />
+	</root>
+</log4j:configuration>

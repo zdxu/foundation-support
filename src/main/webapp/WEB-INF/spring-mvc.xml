@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx-3.2.xsd 
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+						http://www.springframework.org/schema/context 
+   						http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    					http://www.springframework.org/schema/mvc  
+						http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+	
+	<!-- mvc注解扫描 
+		 1、扫描注解，注册bean至spring容器 
+		 2、激活已在spring容器中注册的bean  具有annotation-config的功能-->
+	<!-- 对iflytek包下所有的类进行扫描 -->
+	<!--  <context:component-scan base-package="com.iflytek"/>-->
+	<!-- 对web包中的所有类进行扫描，以完成bean的创建和自动依赖注入功能 ,防止该注解对事物的影响-->
+	<context:component-scan base-package="com.zdxu.bd.web.**" use-default-filters="false">
+		<context:include-filter 
+			type="annotation" 
+			expression="org.springframework.stereotype.Controller"/>
+			 <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/> 
+	</context:component-scan>
+	
+	<!-- 开启mvc注解（激活已在spring容器中注册的bean）-->
+	<context:annotation-config />
+	
+	<!-- annotation-driven 与default-servlet-handler需要一起使用
+	这样未在controller注册的请求的，都将被default-servlet-handler处理
+	（当annotation-driven不存在，default-servlet-handler存在时，controler注册
+	的请求无效，不会被访问到）
+	 -->
+	<!-- mvc注解驱动 
+		DefaultAnnotationHandlerMapping
+		AnnotationMethodHandlerAdapter
+	-->
+	<mvc:annotation-driven />
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->	
+	<mvc:default-servlet-handler />
+	
+	<!-- 对模型视图的名称的解析 -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="order" value="1" />
+		<!-- 使用JSP页面进行输出 -->
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<!-- 指定了表示层的前缀 --> <!-- 这个配置是配置JSP页面的位置，按照你自己的配置来配 -->
+		<property name="prefix" value="/WEB-INF/view/" />
+		<!-- 指定了表示层的后缀 -->
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!--  定义上传组件包 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="1000000000" />
+	</bean>
+	
+</beans>
