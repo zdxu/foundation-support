@@ -6,7 +6,7 @@ buildscript {
 	
 	dependencies {
 		classpath 'org.hidetake:gradle-ssh-plugin:2.6.0'			//实现ssh插件
-		classpath 'org.akhikhl.gretty:gretty:+'						//
+		//classpath 'org.akhikhl.gretty:gretty:+'						//
 		classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.3'			//内嵌tomcat服务器插件
 	}
 }
@@ -15,15 +15,15 @@ apply plugin: 'war'
 apply plugin: 'eclipse'
 apply plugin: 'org.hidetake.ssh'
 apply plugin: "com.bmuschko.tomcat" 
+//apply plugin: 'org.akhikhl.gretty'
 
 group 'com.zdxu.bd'
 def artifactid = "gradle-hibernate"
 version '0.1.0-SNAPSHOT'
 description = 'a hibernate projcet of gradle'
-buildDir = 'target'
 
 repositories {
-    maven {url 'file:///D:/apache-maven-3.0.1/.m2/repository/'}
+	maven {url 'file:///D:/apache-maven-3.0.1/.m2/repository/'}
     mavenCentral()
     jcenter()
 }
@@ -82,7 +82,7 @@ dependencies {
     testCompile "junit:junit:4.12"
     testCompile "org.springframework:spring-test:$springVersion"
     
-    def tomcatVersion = '8.0.27'
+    tomcatVersion = '8.0.27'
     tomcat  "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion",
             "org.apache.tomcat.embed:tomcat-embed-logging-juli:$tomcatVersion",
             "org.apache.tomcat.embed:tomcat-embed-jasper:$tomcatVersion"
@@ -96,5 +96,6 @@ tasks.withType(JavaCompile) {
 tomcatRun.httpPort = 8888
 tomcatRun.contextPath = '/gradle-hibernate'
 tomcatRunWar.contextPath = '/gradle-hibernate'
+
 
 

@@ -1,5 +1,7 @@
 package com.zdxu.bd.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,14 @@ public class DemoController {
 
 	ResponseStatusExceptionResolver s;
 	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	/**
 	 * 验证服务是否运行
 	 * @param params
 	 * @return
 	 */
-	@RequestMapping("/index")
+	@RequestMapping("/index.do")
 	@ResponseBody
 	public String demo() {
 		System.out.println(GlobalConfig.getString("jdbc.username"));
@@ -43,5 +47,13 @@ public class DemoController {
 		return "111";
 		//throw new TestException1();
 	}
+	
+	@RequestMapping("/demo3")
+	@ResponseBody
+	public String demo3() {
+		logger.info("测试日志是否响应！");
+		return "test demo3"+GlobalConfig.getString("jdbc.pool.maxActive");
+	}
+	
 	
 }

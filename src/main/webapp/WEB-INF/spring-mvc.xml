@@ -17,33 +17,31 @@
     					http://www.springframework.org/schema/mvc  
 						http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
 	
-	<!-- mvc注解扫描 
+	<!-- spring注解扫描(对指定包进行扫描)
 		 1、扫描注解，注册bean至spring容器 
-		 2、激活已在spring容器中注册的bean  具有annotation-config的功能-->
+		 2、激活已在spring容器中注册的bean  
+		   功能与annotation-config类似,多了指定包扫描等-->
 	<!-- 对iflytek包下所有的类进行扫描 -->
 	<!--  <context:component-scan base-package="com.iflytek"/>-->
 	<!-- 对web包中的所有类进行扫描，以完成bean的创建和自动依赖注入功能 ,防止该注解对事物的影响-->
 	<context:component-scan base-package="com.zdxu.bd.web.**" use-default-filters="false">
-		<context:include-filter 
-			type="annotation" 
-			expression="org.springframework.stereotype.Controller"/>
-			 <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/> 
+		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+		<!-- 控制器增强-->
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/> 
 	</context:component-scan>
 	
-	<!-- 开启mvc注解（激活已在spring容器中注册的bean）-->
-	<context:annotation-config />
-	
-	<!-- annotation-driven 与default-servlet-handler需要一起使用
-	这样未在controller注册的请求的，都将被default-servlet-handler处理
-	（当annotation-driven不存在，default-servlet-handler存在时，controler注册
-	的请求无效，不会被访问到）
-	 -->
+	<!-- annotation-driven 配合@controller注解、dispatchServlet、
+	@requestMapping、component-scan 使得请求被分发，响应。-->
 	<!-- mvc注解驱动 
 		DefaultAnnotationHandlerMapping
 		AnnotationMethodHandlerAdapter
 	-->
 	<mvc:annotation-driven />
-	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->	
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL
+		   另外两种方式：
+		 1、激活Tomcat的defaultServlet来处理静态文件  要写在dispatcherServlet前面
+		 2、<mvc:resource .../>
+	-->	
 	<mvc:default-servlet-handler />
 	
 	<!-- 对模型视图的名称的解析 -->

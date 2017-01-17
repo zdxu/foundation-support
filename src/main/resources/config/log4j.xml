@@ -73,7 +73,7 @@
 	</logger>
 	<root>
 		<!-- TRACE < DEBUG < INFO < WARN < ERROR < FATAL -->
-		<priority value="error" /><!--日志输出最低级别 -->
+		<priority value="DEBUG" /><!--日志输出最低级别 -->
 		<appender-ref ref="console.out" />
 		<appender-ref ref="console.err" />
 		<appender-ref ref="error" />

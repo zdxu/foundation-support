@@ -33,6 +33,13 @@
 			防止内存泄露
 			清除该应用相关的在javaBeans Introspector（内省）缓冲中的Introspector
 		</description>
+		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+	</listener>
+	
+	<listener>
+		<description>
+		增加spring容器中的Bean对request,session,globalsession作用域的支持
+		</description>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	
